@@ -1,5 +1,10 @@
+import { Heading } from "../../components/Heading";
+import style from "./login.module.scss";
+
 export function Login() {
     return (
-        <h1>Login</h1>
+        <div className={style.container}>
+            <Heading text="Witamy ponownie!"/>
+        </div>
     );
 }

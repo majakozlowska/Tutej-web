@@ -9,7 +9,7 @@ import { Notices } from './pages/Notices';
 import { MainLayout } from './components/MainLayout';
 
 function App() {
-    const isAuth = true; // tymczasowo
+    const isAuth = false; // tymczasowo
 
     return (
         <BrowserRouter>
