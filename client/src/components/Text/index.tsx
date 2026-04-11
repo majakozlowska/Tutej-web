@@ -4,7 +4,7 @@ interface textProps {
     text: string;
 }
 
-export function Text({ text }: textProps) {
+export default function Text({ text }: textProps) {
     return (
         <p className={styles.text}>{text}</p>
     );

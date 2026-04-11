@@ -1,0 +1,36 @@
+@use "@/assets/scss/variables" as *;
+
+.container {
+    width: 100%;
+    border-radius: 10px;
+    background-color: $gray;
+    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    .iconWrapper {
+        background-color: $gray;
+
+        svg {
+            background-color: $gray;
+
+            path {
+                stroke: $darkGray;
+            }
+        }
+    }
+
+    .input {
+        border: none;
+        background-color: transparent;
+
+        &:focus {
+            outline: none;
+        }
+
+        &::placeholder {
+            color: $darkGray;
+        }
+    }
+}
