@@ -1,4 +1,7 @@
+@use "@/assets/scss/variables" as *;
+
 .heading {
+    font-family: $headingFont;
     font-size: 3.2rem;
     font-weight: 600;
 }
