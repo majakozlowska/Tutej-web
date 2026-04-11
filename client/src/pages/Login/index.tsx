@@ -2,6 +2,7 @@ import style from "./login.module.scss";
 import Heading from "../../components/Heading";
 import Text from "../../components/Text";
 import InputField from "../../components/InputField";
+import Button from "../../components/Button";
 
 export function Login() {
     return (
@@ -13,6 +14,7 @@ export function Login() {
                     <Text text="Twoje dane" />
                     <InputField placeholder="Adres e-mail" type="email" icon="at" />
                     <InputField placeholder="Hasło" type="password" icon="lock" />
+                    <Button text="Zaloguj się" />
                 </div>
                 <Text text="Nie posiadasz jeszcze konta?" />
             </div>
