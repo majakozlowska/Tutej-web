@@ -3,6 +3,7 @@ import Heading from "../../components/Heading";
 import Text from "../../components/Text";
 import InputField from "../../components/InputField";
 import Button from "../../components/Button";
+import TextLink from "../../components/TextLink";
 
 export function Login() {
     return (
@@ -16,7 +17,10 @@ export function Login() {
                     <InputField placeholder="Hasło" type="password" icon="lock" />
                     <Button text="Zaloguj się" />
                 </div>
-                <Text text="Nie posiadasz jeszcze konta?" />
+                <div className={style.question}>
+                    <Text text="Nie posiadasz jeszcze konta?" />
+                    <TextLink to="/register" text="Zarejestruj się" />
+                </div>
             </div>
         </div>
     );
