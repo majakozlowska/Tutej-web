@@ -4,7 +4,7 @@
     width: 100%;
     border-radius: 10px;
     background-color: $gray;
-    padding: 10px 12px;
+    padding: 14px 12px;
     display: flex;
     align-items: center;
     gap: 12px;
@@ -24,6 +24,7 @@
     .input {
         border: none;
         background-color: transparent;
+        width: 100%;
 
         &:focus {
             outline: none;
