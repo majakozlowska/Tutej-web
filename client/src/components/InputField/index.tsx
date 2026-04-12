@@ -44,15 +44,16 @@ interface inputFieldProps {
     placeholder: string;
     type?: string;
     icon?: string;
+    onChange?: (value: string) => void;
 }
 
-export default function InputField({placeholder, type = "text", icon = "letters"}: inputFieldProps) {
+export default function InputField({placeholder, type = "text", icon = "letters", onChange }: inputFieldProps) {
     return (
         <div className={styles.container}>
             <span className={styles.iconWrapper}>
                 {icons[icon as keyof typeof icons]}
             </span>
-            <input className={styles.input} placeholder={placeholder} type={type}/>
+            <input className={styles.input} placeholder={placeholder} type={type} onChange={(e) => onChange?.(e.target.value)} />
         </div>
     );
 }

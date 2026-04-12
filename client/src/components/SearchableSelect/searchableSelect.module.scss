@@ -10,7 +10,6 @@
 
 .selectWrapper {
     width: 100%;
-    margin-bottom: 1.5rem;
     border-radius: 12px;
 
     * {
@@ -66,7 +65,6 @@
             color: $green;
         }
 
-        // Menu rozwijane
         .react-select__menu {
             border-radius: 12px;
             overflow: hidden;
@@ -79,7 +77,6 @@
             }
         }
 
-        // Opcje na liście
         .react-select__option {
             padding: 12px 20px;
             cursor: pointer;
@@ -88,7 +85,7 @@
             border-radius: 0;
 
             &--is-focused {
-                background-color: rgba($green, 0.1); // Jasnozielone tło hover
+                background-color: rgba($green, 0.1);
                 color: #333;
             }
 
