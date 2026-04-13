@@ -29,5 +29,27 @@ router.post("/register", async (req: Request, res: Response) => {
         return res.status(500).json({ message: "Błąd serwera." });
     }
 });
+router.post("/login", async (req: Request, res: Response) => {
+    const { email, password } = req.body;
+
+    try {
+        const user = await prisma.user.findUnique({ where: { email } });
+
+        if (!user) {
+            return res.status(401).json({ message: "Nieprawidłowy email lub hasło." });
+        }
+
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+
+        if (!isPasswordValid) {
+            return res.status(401).json({ message: "Nieprawidłowy email lub hasło." });
+        }
+
+        return res.status(200).json({ message: "Zalogowano.", userId: user.id });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: "Błąd serwera." });
+    }
+});
 
 export default router;
