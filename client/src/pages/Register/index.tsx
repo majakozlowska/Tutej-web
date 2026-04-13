@@ -6,8 +6,10 @@ import Button from "../../components/Button";
 import TextLink from "../../components/TextLink";
 import SearchableSelect from "../../components/SearchableSelect";
 import {useState} from "react";
+import { useNavigate } from "react-router-dom";
 
 export function Register() {
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         fullName: '',
         email: '',
@@ -81,8 +83,14 @@ export function Register() {
                 setError(data.message || "Wystąpił błąd podczas rejestracji.");
                 return;
             }
+            else{
+                navigate("/login");
+                console.log("Zarejestrowano użytkownika:", data);
 
-            console.log("Zarejestrowano:", data);
+            }
+
+
+
         } catch{
             setError("Nie można połączyć się z serwerem.");
         }
