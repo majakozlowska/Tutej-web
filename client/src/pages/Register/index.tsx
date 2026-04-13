@@ -50,7 +50,7 @@ export function Register() {
         return null;
     };
 
-    const handleRegister = () => {
+    const handleRegister = async () => {
         const errorMessage = validate();
 
         if (errorMessage) {
@@ -59,7 +59,33 @@ export function Register() {
         }
 
         setError(null);
-        console.log("Dane poprawne:", formData);
+
+        const [firstName, lastName] = formData.fullName.trim().split(" ");
+
+        try {
+            const response = await fetch("http://localhost:5000/api/auth/register", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    firstName,
+                    lastName,
+                    email: formData.email,
+                    password: formData.password,
+                    neighbourhoodId: formData.neighborhoodId,
+                }),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                setError(data.message || "Wystąpił błąd podczas rejestracji.");
+                return;
+            }
+
+            console.log("Zarejestrowano:", data);
+        } catch{
+            setError("Nie można połączyć się z serwerem.");
+        }
     };
 
     return (
