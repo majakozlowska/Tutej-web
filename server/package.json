@@ -15,10 +15,15 @@
   "type": "module",
   "dependencies": {
     "@prisma/client": "^6.19.3",
+<<<<<<< Updated upstream
     "bcrypt": "^6.0.0",
     "express": "^5.2.1",
     "cors": "^2.8.6",
     "tsx": "^4.21.0"
+=======
+    "express": "^5.2.1",
+    "react-router-dom": "^7.14.0"
+>>>>>>> Stashed changes
   },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",

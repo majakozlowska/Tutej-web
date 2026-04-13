@@ -16,8 +16,7 @@ function App() {
             <Routes>
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
-
-                <Route path="/" element={isAuth ? <MainLayout /> : <Navigate to="/login" />}>
+                <Route path="/" element={isAuth ? <MainLayout /> : <Navigate to="/login"/>}>
                     <Route index element={<Home />} />
                     <Route path="events" element={<Events />} />
                     <Route path="trade" element={<Trade />} />
