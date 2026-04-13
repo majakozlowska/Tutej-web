@@ -71,7 +71,7 @@ export function Register() {
                     lastName,
                     email: formData.email,
                     password: formData.password,
-                    neighbourhoodId: formData.neighborhoodId,
+                    neighborhoodId: formData.neighborhoodId,
                 }),
             });
 

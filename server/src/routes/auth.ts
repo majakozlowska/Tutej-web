@@ -6,7 +6,8 @@ const router = Router();
 const prisma = new PrismaClient();
 
 router.post("/register", async (req: Request, res: Response) => {
-    const { firstName, lastName, email, password, neighborhoodId } = req.body;
+    const { firstName, lastName, email, password, neighborhoodId, neighborhood } = req.body;
+    console.log("ID DZIELNICY:", neighborhoodId);
 
     try {
         const existing = await prisma.user.findUnique({ where: { email } });
@@ -17,7 +18,9 @@ router.post("/register", async (req: Request, res: Response) => {
         const hashed = await bcrypt.hash(password, 10);
 
         const user = await prisma.user.create({
-            data: { firstName, lastName, email, password: hashed, neighborhoodId },
+            data: { firstName, lastName, email, password: hashed,neighborhood: {
+                    connect: { id: Number(neighborhoodId) }
+                } },
         });
 
         return res.status(201).json({ message: "Zarejestrowano.", userId: user.id });
