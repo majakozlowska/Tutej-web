@@ -9,8 +9,8 @@ import { Notices } from './pages/Notices';
 import { MainLayout } from './components/MainLayout';
 
 function App() {
-    const isAuth = false; // tymczasowo
-
+    const isAuth = localStorage.getItem("isAuth") === "true";
+    console.log(isAuth);
     return (
         <BrowserRouter>
             <Routes>
