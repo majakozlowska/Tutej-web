@@ -31,6 +31,7 @@ export function SettingsMenu({ isOpen, onClose }: SettingsMenuProps) {
         <div className={styles.menu} ref={menuRef}>
             <ul>
                 <li><button onClick={onClose}>Ustawienia główne</button></li>
+                <li><button onClick={onClose}>Konto</button></li>
                 <li><button onClick={onClose}>Wsparcie</button></li>
                 <li className={styles.divider} />
                 <li><button className={styles.logout} onClick={handleLogout}>Wyloguj się</button></li>

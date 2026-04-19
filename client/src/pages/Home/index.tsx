@@ -1,5 +1,10 @@
+import styles from "./home.module.scss";
+
 export function Home() {
     return (
-        <h1>Home</h1>
+        <div className={styles.container}>
+            <h1 className={styles.pageTitle}>Home</h1>
+            <h1 className={styles.title}>Witaj w Tutej</h1>
+        </div>
     );
 }
