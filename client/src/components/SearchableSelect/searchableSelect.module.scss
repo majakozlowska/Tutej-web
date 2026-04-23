@@ -1,103 +1,109 @@
-@use "@/assets/scss/variables" as *;
+@use '@/assets/scss/variables' as *;
 
 .leftIcon {
-    margin-right: 10px;
+	margin-right: 10px;
 
-    path {
-        stroke: $darkGray;
-    }
+	path {
+		stroke: $darkGray;
+	}
 }
 
 .selectWrapper {
-    width: 100%;
-    border-radius: 12px;
+	width: 100%;
+	border-radius: 12px;
 
-    * {
-        background-color: $gray;
-        border-radius: 12px;
-    }
+	* {
+		background-color: $gray;
+		border-radius: 12px;
+	}
 
-    :global {
-        .react-select__control {
-            background-color: $gray;
-            border-radius: 12px;
-            min-height: 55px;
-            box-shadow: none;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            border: none !important;
-        }
+	:global {
+		.react-select__control {
+			background-color: $gray;
+			border-radius: 12px;
+			min-height: 55px;
+			box-shadow: none;
+			cursor: pointer;
+			transition: all 0.3s ease;
+			display: flex;
+			align-items: center;
+			border: none !important;
+		}
 
-        .react-select__value-container {
-            padding: 0 12px;
-            display: flex;
-            align-items: center;
-        }
+		.react-select__value-container {
+			padding: 0 12px;
+			display: flex;
+			align-items: center;
+		}
 
-        .react-select__single-value {
-            color: $black;
-            margin: 0;
-        }
+		.react-select__single-value {
+			color: $black;
+			margin: 0;
+		}
 
-        .react-select__placeholder {
-            color: $darkGray;
-            margin: 0;
-        }
+		.react-select__placeholder {
+			color: $darkGray;
+			margin: 0;
+		}
 
-        .react-select__dropdown-indicator {
-            padding-right: 12px;
-            transition: transform 0.4s ease;
-            background-color: transparent;
+		.react-select__dropdown-indicator {
+			padding-right: 12px;
+			transition: transform 0.4s ease;
+			background-color: transparent;
 
-            svg {
-                background-color: transparent;
+			svg {
+				background-color: transparent;
 
-                path {
-                    stroke: $darkGray;
-                }
-            }
-        }
+				path {
+					stroke: $darkGray;
+				}
+			}
+		}
 
-        .react-select__control--menu-is-open .react-select__dropdown-indicator {
-            transform: rotate(-180deg) translateX(2px);
-            color: $green;
-        }
+		.react-select__control--menu-is-open .react-select__dropdown-indicator {
+			transform: rotate(-180deg) translateX(2px);
+			color: $green;
+		}
 
-        .react-select__menu {
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            animation: slideIn 0.3s ease-out forwards;
-            z-index: 999;
+		.react-select__menu {
+			border-radius: 12px;
+			overflow: hidden;
+			box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+			animation: slideIn 0.3s ease-out forwards;
+			z-index: 999;
 
-            & * {
-                background-color: $white;
-            }
-        }
+			& * {
+				background-color: $white;
+			}
+		}
 
-        .react-select__option {
-            padding: 12px 20px;
-            cursor: pointer;
-            transition: background 0.2s;
-            background-color: $white;
-            border-radius: 0;
+		.react-select__option {
+			padding: 12px 20px;
+			cursor: pointer;
+			transition: background 0.2s;
+			background-color: $white;
+			border-radius: 0;
 
-            &--is-focused {
-                background-color: rgba($green, 0.1);
-                color: #333;
-            }
+			&--is-focused {
+				background-color: rgba($green, 0.1);
+				color: #333;
+			}
 
-            &--is-selected {
-                background-color: $green !important;
-                color: white;
-            }
-        }
+			&--is-selected {
+				background-color: $green !important;
+				color: white;
+			}
+		}
 
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-    }
+		@keyframes slideIn {
+			from {
+				opacity: 0;
+				transform: translateY(-10px);
+			}
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
+	}
 }

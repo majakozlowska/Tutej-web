@@ -1,11 +1,9 @@
-import styles from './text.module.scss';
+import styles from './text.module.scss'
 
 interface textProps {
-    text: string;
+	text: string
 }
 
 export default function Text({ text }: textProps) {
-    return (
-        <p className={styles.text}>{text}</p>
-    );
+	return <p className={styles.text}>{text}</p>
 }

@@ -1,15 +1,15 @@
-import { Link } from 'react-router-dom';
-import styles from './textLink.module.scss';
+import { Link } from 'react-router-dom'
+import styles from './textLink.module.scss'
 
 interface TextLinkProps {
-    to: string;
-    text: string;
+	to: string
+	text: string
 }
 
 export default function TextLink({ to, text }: TextLinkProps) {
-    return (
-        <Link to={to} className={styles.textLink}>
-            {text}
-        </Link>
-    );
+	return (
+		<Link to={to} className={styles.textLink}>
+			{text}
+		</Link>
+	)
 }

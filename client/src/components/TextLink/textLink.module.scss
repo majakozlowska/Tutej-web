@@ -1,13 +1,13 @@
-@use "@/assets/scss/variables" as *;
+@use '@/assets/scss/variables' as *;
 
 .textLink {
-    color: $green;
-    font-style: italic;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    width: fit-content;
+	color: $green;
+	font-style: italic;
+	text-decoration: none;
+	transition: all 0.3s ease;
+	width: fit-content;
 
-    &:hover {
-        color: $lightGreen;
-    }
+	&:hover {
+		color: $lightGreen;
+	}
 }

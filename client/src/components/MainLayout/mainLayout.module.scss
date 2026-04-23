@@ -1,57 +1,57 @@
-@use "@/assets/scss/variables" as *;
+@use '@/assets/scss/variables' as *;
 
 .mainLayout {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    padding: 80px 40px 50px 40px;
-    overflow: hidden;
+	display: flex;
+	flex-direction: column;
+	height: 100vh;
+	padding: 80px 40px 50px 40px;
+	overflow: hidden;
 }
 
 .content {
-    flex: 1;
-    position: relative;
-    overflow-y: auto;
+	flex: 1;
+	position: relative;
+	overflow-y: auto;
 
-    .topActions {
-        height: fit-content;
-        position: absolute;
-        top: 0;
-        right: 0;
-        z-index: 50;
-        display: flex;
-        gap: 20px;
+	.topActions {
+		height: fit-content;
+		position: absolute;
+		top: 0;
+		right: 0;
+		z-index: 50;
+		display: flex;
+		gap: 20px;
 
-        .wrapper {
-            position: relative;
-        }
+		.wrapper {
+			position: relative;
+		}
 
-        .actionButton {
-            background: transparent;
-            border: none;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background 0.2s ease;
+		.actionButton {
+			background: transparent;
+			border: none;
+			border-radius: 50%;
+			cursor: pointer;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			transition: background 0.2s ease;
 
-            &:hover {
-                background: rgba(0, 0, 0, 0.05);
-            }
+			&:hover {
+				background: rgba(0, 0, 0, 0.05);
+			}
 
-            svg {
-                width: 35px;
-                height: 35px;
+			svg {
+				width: 35px;
+				height: 35px;
 
-                path {
-                    stroke: $darkGray;
-                }
-            }
-        }
-    }
+				path {
+					stroke: $darkGray;
+				}
+			}
+		}
+	}
 }
 
 .navbar {
-    margin-top: auto;
+	margin-top: auto;
 }

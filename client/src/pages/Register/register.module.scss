@@ -1,18 +1,18 @@
 .container {
-    display: flex;
-    flex-direction: column;
-    padding: 60px 40px 50px 40px;
-    gap: 40px;
+	display: flex;
+	flex-direction: column;
+	padding: 60px 40px 50px 40px;
+	gap: 40px;
 
-    .form {
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-    }
+	.form {
+		display: flex;
+		flex-direction: column;
+		gap: 15px;
+	}
 
-    .question {
-        display: flex;
-        flex-direction: column;
-        gap: 0;
-    }
+	.question {
+		display: flex;
+		flex-direction: column;
+		gap: 0;
+	}
 }
