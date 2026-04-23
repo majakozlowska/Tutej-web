@@ -1,0 +1,106 @@
+@use '@/assets/scss/variables' as *;
+
+.menu {
+	position: absolute;
+	top: calc(100% + 12px);
+	right: -50px;
+	background: $white;
+	border: 3px solid $gray;
+	border-radius: 12px;
+	box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+	width: 320px;
+	z-index: 100;
+	overflow: hidden;
+	animation: slideIn 0.25s ease-out forwards;
+
+	&.closing {
+		animation: slideOut 0.2s ease-in forwards;
+	}
+}
+
+.header {
+	padding: 16px 20px;
+	font-size: 1.6rem;
+	font-weight: 800;
+	color: $black;
+	text-transform: uppercase;
+	background: rgba($gray, 0.1);
+	border-bottom: 3px solid $gray;
+}
+
+ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	max-height: 350px;
+	overflow-y: auto;
+}
+
+.item {
+	display: flex;
+	align-items: flex-start;
+	gap: 12px;
+	padding: 16px 20px;
+	border-bottom: 3px solid $gray;
+	cursor: pointer;
+	transition: background 0.2s;
+
+	&:last-child {
+		border-bottom: none;
+	}
+}
+
+.imageWrapper {
+	flex-shrink: 0;
+	width: 42px;
+	height: 42px;
+	border-radius: 50%;
+	background: $gray;
+	overflow: hidden;
+
+	img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+}
+
+.body {
+	flex: 1;
+	min-width: 0;
+}
+
+.content {
+	margin: 0 0 4px 0;
+	font-size: 1.8rem;
+	line-height: 1.3;
+	color: $black;
+	word-wrap: break-word;
+}
+
+.time {
+	font-size: 1.6rem;
+	color: $darkGray;
+}
+
+@keyframes slideIn {
+	from {
+		opacity: 0;
+		transform: translateY(-10px) scale(0.98);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0) scale(1);
+	}
+}
+
+@keyframes slideOut {
+	from {
+		opacity: 1;
+		transform: translateY(0) scale(1);
+	}
+	to {
+		opacity: 0;
+		transform: translateY(-10px) scale(0.98);
+	}
+}

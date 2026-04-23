@@ -1,37 +1,37 @@
-@use "@/assets/scss/variables" as *;
+@use '@/assets/scss/variables' as *;
 
 .container {
-    width: 100%;
-    border-radius: 10px;
-    background-color: $gray;
-    padding: 14px 12px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
+	width: 100%;
+	border-radius: 10px;
+	background-color: $gray;
+	padding: 14px 12px;
+	display: flex;
+	align-items: center;
+	gap: 12px;
 
-    .iconWrapper {
-        background-color: $gray;
+	.iconWrapper {
+		background-color: $gray;
 
-        svg {
-            background-color: $gray;
+		svg {
+			background-color: $gray;
 
-            path {
-                stroke: $darkGray;
-            }
-        }
-    }
+			path {
+				stroke: $darkGray;
+			}
+		}
+	}
 
-    .input {
-        border: none;
-        background-color: transparent;
-        width: 100%;
+	.input {
+		border: none;
+		background-color: transparent;
+		width: 100%;
 
-        &:focus {
-            outline: none;
-        }
+		&:focus {
+			outline: none;
+		}
 
-        &::placeholder {
-            color: $darkGray;
-        }
-    }
+		&::placeholder {
+			color: $darkGray;
+		}
+	}
 }

@@ -1,0 +1,88 @@
+@use '@/assets/scss/variables' as *;
+
+.menu {
+	position: absolute;
+	top: calc(100% + 12px);
+	right: 0;
+	background: $white;
+	border: 3px solid $gray;
+	border-radius: 12px;
+	box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+	min-width: 220px;
+	z-index: 100;
+	overflow: hidden;
+	animation: slideIn 0.25s ease-out forwards;
+
+	&.closing {
+		animation: slideOut 0.2s ease-in forwards;
+	}
+
+	ul {
+		list-style: none;
+		margin: 0;
+		padding: 8px 0;
+	}
+
+	li {
+		button {
+			width: calc(100% - 16px);
+			border-radius: 6px;
+			margin: 0 8px;
+			padding: 14px 20px;
+			text-align: left;
+			background: transparent;
+			border: none;
+			cursor: pointer;
+			font-size: 1.8rem;
+			font-weight: 500;
+			font-family: inherit;
+			color: $black;
+			white-space: nowrap;
+			transition: all 0.2s ease;
+
+			&:hover {
+				background: rgba($green, 0.08);
+				color: $green;
+			}
+		}
+	}
+}
+
+.divider {
+	height: 3px;
+	background: $gray;
+	margin: 6px 0;
+}
+
+.logout {
+	button {
+		color: #d32f2f;
+
+		&:hover {
+			background: rgba(211, 47, 47, 0.08);
+			color: #d32f2f;
+		}
+	}
+}
+
+@keyframes slideIn {
+	from {
+		opacity: 0;
+		transform: translateY(-12px) scale(0.95);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0) scale(1);
+	}
+}
+
+@keyframes slideOut {
+	from {
+		opacity: 1;
+		transform: translateY(0) scale(1);
+	}
+	to {
+		opacity: 0;
+		transform: translateY(-12px) scale(0.95);
+	}
+}

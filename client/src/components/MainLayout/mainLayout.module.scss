@@ -1,20 +1,57 @@
+@use '@/assets/scss/variables' as *;
+
 .mainLayout {
-    margin: 0;
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    padding: 80px 40px 50px 40px;
-    gap: 40px;
+	display: flex;
+	flex-direction: column;
+	height: 100vh;
+	padding: 80px 40px 50px 40px;
+	overflow: hidden;
+}
 
-    .content {
-        flex: 1;
-        width: 100%;
-    }
+.content {
+	flex: 1;
+	position: relative;
+	overflow-y: auto;
 
-    .navbar {
-        width: 100%;
-        display: flex;
-        justify-content: center;
-    }
+	.topActions {
+		height: fit-content;
+		position: absolute;
+		top: 0;
+		right: 0;
+		z-index: 50;
+		display: flex;
+		gap: 20px;
+
+		.wrapper {
+			position: relative;
+		}
+
+		.actionButton {
+			background: transparent;
+			border: none;
+			border-radius: 50%;
+			cursor: pointer;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			transition: background 0.2s ease;
+
+			&:hover {
+				background: rgba(0, 0, 0, 0.05);
+			}
+
+			svg {
+				width: 35px;
+				height: 35px;
+
+				path {
+					stroke: $darkGray;
+				}
+			}
+		}
+	}
+}
+
+.navbar {
+	margin-top: auto;
 }
