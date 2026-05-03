@@ -12,15 +12,32 @@
 	flex: 1;
 	position: relative;
 	overflow-y: auto;
+	padding-top: 80px;
 
 	.topActions {
-		height: fit-content;
+		width: 100%;
+		height: 35px;
 		position: absolute;
 		top: 0;
 		right: 0;
 		z-index: 50;
 		display: flex;
+		justify-content: space-between;
 		gap: 20px;
+
+		& > svg {
+			height: 100%;
+
+			path {
+				fill: $darkGray !important;
+				stroke: $darkGray !important;
+			}
+		}
+
+		.actions {
+			display: flex;
+			gap: 15px;
+		}
 
 		.wrapper {
 			position: relative;

@@ -1,3 +1,10 @@
+import styles from './trade.module.scss'
+import Heading from '../../components/Heading'
+
 export function Trade() {
-	return <h1>Trade</h1>
+	return (
+		<div className={styles.container}>
+			<Heading text="Oferty" />
+		</div>
+	)
 }

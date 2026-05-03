@@ -1,3 +1,10 @@
+import styles from './forum.module.scss'
+import Heading from '../../components/Heading'
+
 export function Forum() {
-	return <h1>Forum</h1>
+	return (
+		<div className={styles.container}>
+			<Heading text="Forum" />
+		</div>
+	)
 }

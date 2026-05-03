@@ -1,3 +1,10 @@
+import styles from './events.module.scss'
+import Heading from '../../components/Heading'
+
 export function Events() {
-	return <h1>Events</h1>
+	return (
+		<div className={styles.container}>
+			<Heading text="Wydarzenia" />
+		</div>
+	)
 }
