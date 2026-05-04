@@ -44,6 +44,7 @@ model User {
   comments       Comment[]
   announcements  Announcement[]
   listings       Listing[]
+  hostedEvents   Event[]        @relation("EventHost")
   attending      Event[]        @relation("EventAttendees")
   createdAt      DateTime       @default(now())
 }
@@ -54,6 +55,10 @@ model Event {
   description    String
   place          String
   date           DateTime
+  duration       String?
+  price          Decimal?     @db.Decimal(10, 2)
+  authorId       Int
+  author         User         @relation("EventHost", fields: [authorId], references: [id])
   neighborhoodId Int
   neighborhood   Neighborhood @relation(fields: [neighborhoodId], references: [id])
   attendees      User[]       @relation("EventAttendees")

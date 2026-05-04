@@ -15,8 +15,6 @@ async function main() {
 		prisma.neighborhood.create({ data: { name: 'Osiedle Słoneczne' } }),
 		prisma.neighborhood.create({ data: { name: 'Zielona Dolina' } }),
 		prisma.neighborhood.create({ data: { name: 'Parkowe Wzgórze' } }),
-		prisma.neighborhood.create({ data: { name: 'Stare Miasto' } }),
-		prisma.neighborhood.create({ data: { name: 'Nad Potokiem' } }),
 	])
 
 	const users = await Promise.all([
@@ -25,7 +23,7 @@ async function main() {
 				firstName: 'Anna',
 				lastName: 'Kowalska',
 				email: 'anna@example.com',
-				password: 'password123',
+				password: 'hashed_password_123',
 				role: Role.ADMIN,
 				neighborhoodId: neighborhoods[0].id,
 			},
@@ -35,7 +33,7 @@ async function main() {
 				firstName: 'Jan',
 				lastName: 'Nowak',
 				email: 'jan@example.com',
-				password: 'password123',
+				password: 'hashed_password_123',
 				role: Role.COUNCILLOR,
 				neighborhoodId: neighborhoods[0].id,
 			},
@@ -45,7 +43,7 @@ async function main() {
 				firstName: 'Marek',
 				lastName: 'Zieliński',
 				email: 'marek@example.com',
-				password: 'password123',
+				password: 'hashed_password_123',
 				role: Role.USER,
 				neighborhoodId: neighborhoods[1].id,
 			},
@@ -55,246 +53,108 @@ async function main() {
 				firstName: 'Ewa',
 				lastName: 'Wiśniewska',
 				email: 'ewa@example.com',
-				password: 'password123',
+				password: 'hashed_password_123',
 				role: Role.USER,
 				neighborhoodId: neighborhoods[2].id,
 			},
 		}),
-		prisma.user.create({
-			data: {
-				firstName: 'Piotr',
-				lastName: 'Mazur',
-				email: 'piotr@example.com',
-				password: 'password123',
-				role: Role.COUNCILLOR,
-				neighborhoodId: neighborhoods[3].id,
-			},
-		}),
 	])
 
-	await Promise.all([
-		prisma.event.create({
-			data: {
-				name: 'Festyn Sąsiedzki',
-				description: 'Wspólne grillowanie i zabawy.',
-				place: 'Plac zabaw',
-				date: new Date('2026-06-15T14:00:00Z'),
-				neighborhoodId: neighborhoods[0].id,
-				attendees: { connect: [{ id: users[0].id }, { id: users[1].id }] },
-			},
-		}),
-		prisma.event.create({
-			data: {
-				name: 'Spotkanie z Radą',
-				description: 'Dyskusja o nowym oświetleniu.',
-				place: 'Świetlica',
-				date: new Date('2026-05-10T18:00:00Z'),
-				neighborhoodId: neighborhoods[1].id,
-				attendees: { connect: [{ id: users[2].id }] },
-			},
-		}),
-		prisma.event.create({
-			data: {
-				name: 'Sprzątanie Świata',
-				description: 'Zbieramy śmieci w parku.',
-				place: 'Główne wejście do parku',
-				date: new Date('2026-04-22T09:00:00Z'),
-				neighborhoodId: neighborhoods[2].id,
-			},
-		}),
-		prisma.event.create({
-			data: {
-				name: 'Kino Plenerowe',
-				description: 'Pokaz filmu pod gwiazdami.',
-				place: 'Polana',
-				date: new Date('2026-07-20T21:00:00Z'),
-				neighborhoodId: neighborhoods[3].id,
-			},
-		}),
-		prisma.event.create({
-			data: {
-				name: 'Turniej Piłkarski',
-				description: 'Mecze między osiedlami.',
-				place: 'Orlik',
-				date: new Date('2026-08-05T10:00:00Z'),
-				neighborhoodId: neighborhoods[4].id,
-			},
-		}),
-	])
+	await prisma.event.create({
+		data: {
+			name: 'Wielkie Grillowanie u Anny',
+			description: 'Zapraszam wszystkich sąsiadów na wspólne pieczenie kiełbasek i rozmowy o przyszłości naszego osiedla. Zapewniamy napoje i dobrą muzykę!',
+			place: 'Skwer przy ul. Kwiatowej 5',
+			date: new Date('2026-06-20T16:00:00Z'),
+			duration: '4 GODZ.',
+			price: 0,
+			authorId: users[0].id,
+			neighborhoodId: neighborhoods[0].id,
+			attendees: {
+				connect: [{ id: users[1].id }, { id: users[2].id }, { id: users[3].id }]
+			}
+		}
+	})
+
+	await prisma.event.create({
+		data: {
+			name: 'Turniej Szachowy',
+			description: 'Lokalny turniej dla amatorów i profesjonalistów. Nagrody dla pierwszej trójki gwarantowane przez Radę Osiedla.',
+			place: 'Świetlica Osiedlowa',
+			date: new Date('2026-05-15T10:00:00Z'),
+			duration: '6 GODZ.',
+			price: 15.00,
+			authorId: users[1].id,
+			neighborhoodId: neighborhoods[0].id,
+			attendees: {
+				connect: [{ id: users[0].id }, { id: users[2].id }]
+			}
+		}
+	})
+
+	await prisma.event.create({
+		data: {
+			name: 'Joga na trawie',
+			description: 'Poranna sesja jogi dla każdego, bez względu na poziom zaawansowania. Zabierzcie własne maty!',
+			place: 'Park Zielona Dolina',
+			date: new Date('2026-07-01T08:00:00Z'),
+			duration: '1.5 GODZ.',
+			price: 10.00,
+			authorId: users[2].id,
+			neighborhoodId: neighborhoods[1].id,
+			attendees: {
+				connect: [{ id: users[0].id }, { id: users[3].id }]
+			}
+		}
+	})
 
 	const posts = await Promise.all([
 		prisma.post.create({
 			data: {
-				title: 'Piękna pogoda!',
-				content: 'Ktoś chętny na spacer po parku?',
+				title: 'Uwaga na dziki!',
+				content: 'Widziałem dzisiaj rano watahę dzików przy śmietnikach na ul. Leśnej. Uważajcie na psy.',
 				authorId: users[2].id,
 				neighborhoodId: neighborhoods[1].id,
-			},
+			}
 		}),
 		prisma.post.create({
 			data: {
-				title: 'Zgubione klucze',
-				content: 'Znaleziono klucze przy bloku nr 5.',
+				title: 'Polecam hydraulika',
+				content: 'Jeśli ktoś szuka rzetelnego fachowca, Pan Zbyszek uratował moją zalaną kuchnię w 15 minut.',
 				authorId: users[3].id,
 				neighborhoodId: neighborhoods[2].id,
-			},
-		}),
-		prisma.post.create({
-			data: {
-				title: 'Polecam mechanika',
-				content: 'Pan Mirek z garaży robi świetną robotę.',
-				authorId: users[0].id,
-				neighborhoodId: neighborhoods[0].id,
-			},
-		}),
-		prisma.post.create({
-			data: {
-				title: 'Remont ulicy',
-				content: 'Uważajcie na utrudnienia na ul. Polnej.',
-				authorId: users[1].id,
-				neighborhoodId: neighborhoods[0].id,
-			},
-		}),
-		prisma.post.create({
-			data: {
-				title: 'Nowa piekarnia',
-				content: 'Mają pyszne jagodzianki!',
-				authorId: users[4].id,
-				neighborhoodId: neighborhoods[3].id,
-			},
-		}),
+			}
+		})
 	])
 
-	await Promise.all([
-		prisma.comment.create({
-			data: { content: 'Ja chętnie!', authorId: users[0].id, postId: posts[0].id },
-		}),
-		prisma.comment.create({
-			data: {
-				content: 'Widziałem ogłoszenie na klatce.',
-				authorId: users[1].id,
-				postId: posts[1].id,
-			},
-		}),
-		prisma.comment.create({
-			data: { content: 'Dzięki za polecenie!', authorId: users[2].id, postId: posts[2].id },
-		}),
-		prisma.comment.create({
-			data: {
-				content: 'Wreszcie to naprawiają.',
-				authorId: users[3].id,
-				postId: posts[3].id,
-			},
-		}),
-		prisma.comment.create({
-			data: {
-				content: 'Potwierdzam, są genialne.',
-				authorId: users[0].id,
-				postId: posts[4].id,
-			},
-		}),
-	])
+	await prisma.comment.create({
+		data: {
+			content: 'Dzięki za informację, będę omijać ten rejon.',
+			authorId: users[0].id,
+			postId: posts[0].id,
+		}
+	})
 
-	await Promise.all([
-		prisma.announcement.create({
-			data: {
-				title: 'Przerwa w dostawie wody',
-				content: 'W środę od 8 do 12.',
-				authorId: users[1].id,
-				neighborhoodId: neighborhoods[0].id,
-			},
-		}),
-		prisma.announcement.create({
-			data: {
-				title: 'Remont dachu',
-				content: 'Zaczynamy w poniedziałek.',
-				authorId: users[4].id,
-				neighborhoodId: neighborhoods[3].id,
-			},
-		}),
-		prisma.announcement.create({
-			data: {
-				title: 'Wywóz gabarytów',
-				content: 'Już w najbliższy piątek.',
-				authorId: users[1].id,
-				neighborhoodId: neighborhoods[0].id,
-			},
-		}),
-		prisma.announcement.create({
-			data: {
-				title: 'Szczepienia psów',
-				content: 'Punkt mobilny przy fontannie.',
-				authorId: users[1].id,
-				neighborhoodId: neighborhoods[2].id,
-			},
-		}),
-		prisma.announcement.create({
-			data: {
-				title: 'Zebranie mieszkańców',
-				content: 'Obecność obowiązkowa.',
-				authorId: users[1].id,
-				neighborhoodId: neighborhoods[0].id,
-			},
-		}),
-	])
+	await prisma.announcement.create({
+		data: {
+			title: 'Przerwa w dostawie wody',
+			content: 'W związku z awarią rury głównej, w dniu jutrzejszym od 8:00 do 14:00 nie będzie wody w blokach 4-10.',
+			authorId: users[1].id,
+			neighborhoodId: neighborhoods[0].id,
+		}
+	})
 
-	await Promise.all([
-		prisma.listing.create({
-			data: {
-				title: 'Rower górski',
-				description: 'Mało używany, 26 cali.',
-				price: 800,
-				contact: '555-111-222',
-				status: ListingStatus.AVAILABLE,
-				authorId: users[2].id,
-				neighborhoodId: neighborhoods[1].id,
-			},
-		}),
-		prisma.listing.create({
-			data: {
-				title: 'Stół kuchenny',
-				description: 'Drewniany, rozkładany.',
-				price: 300,
-				contact: '555-333-444',
-				status: ListingStatus.RESERVED,
-				authorId: users[3].id,
-				neighborhoodId: neighborhoods[2].id,
-			},
-		}),
-		prisma.listing.create({
-			data: {
-				title: 'Kosiarka spalinowa',
-				description: 'Mocna, po przeglądzie.',
-				price: 1200,
-				contact: '555-555-555',
-				status: ListingStatus.AVAILABLE,
-				authorId: users[0].id,
-				neighborhoodId: neighborhoods[0].id,
-			},
-		}),
-		prisma.listing.create({
-			data: {
-				title: 'Książki do nauki JS',
-				description: 'Zestaw 3 książek.',
-				price: 50,
-				contact: '555-666-777',
-				status: ListingStatus.SOLD,
-				authorId: users[4].id,
-				neighborhoodId: neighborhoods[3].id,
-			},
-		}),
-		prisma.listing.create({
-			data: {
-				title: 'Wynajmę garaż',
-				description: 'Suchy, z prądem.',
-				price: 400,
-				contact: '555-888-999',
-				status: ListingStatus.AVAILABLE,
-				authorId: users[1].id,
-				neighborhoodId: neighborhoods[0].id,
-			},
-		}),
-	])
+	await prisma.listing.create({
+		data: {
+			title: 'Rower dziecięcy na sprzedaż',
+			description: 'Używany tylko przez jeden sezon, stan idealny. Koła 16 cali.',
+			price: 250,
+			contact: '555-123-456',
+			status: ListingStatus.AVAILABLE,
+			authorId: users[3].id,
+			neighborhoodId: neighborhoods[2].id,
+		}
+	})
 }
 
 main()
