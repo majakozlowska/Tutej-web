@@ -8,8 +8,8 @@ export function Events() {
 
 	useEffect(() => {
 		fetch('http://localhost:5000/api/events')
-			.then(res => res.json())
-			.then(data => setEvents(data))
+			.then((res) => res.json())
+			.then((data) => setEvents(data))
 	}, [])
 
 	return (
