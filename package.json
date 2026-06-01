@@ -3,13 +3,21 @@
 		"react-router-dom": "^7.14.0"
 	},
 	"devDependencies": {
+		"@testing-library/jest-dom": "^6.9.1",
+		"@testing-library/react": "^16.3.2",
 		"@types/jest": "^30.0.0",
+		"@vitejs/plugin-react": "^6.0.2",
 		"jest": "^30.4.2",
+		"jsdom": "^29.1.1",
 		"prettier": "^3.8.3",
-		"supertest": "^7.2.2"
+		"sass-embedded": "^1.100.0",
+		"supertest": "^7.2.2",
+		"ts-jest": "^29.4.11",
+		"vitest": "^4.1.7"
 	},
 	"scripts": {
 		"format": "prettier --write .",
-		"test": "jest"
+		"test": "vitest",
+		"test:run": "vitest run"
 	}
 }
