@@ -48,14 +48,10 @@ test.describe('Giełda Sąsiedzka (Trade) - Filtry i Publikacja', () => {
             window.localStorage.setItem('token', 'valid-token')
         })
 
-        // Pełny URL zamiast ** — Playwright może nie przechwytywać requestów
-        // cross-origin (5173 → 5000) przy wzorcu z samym **
         await page.route('http://localhost:5000/api/listings', async (route) => {
             if (route.request().method() === 'GET') {
                 await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(MOCK_LISTINGS) })
             } else {
-                // Inne metody (POST itp.) przepuszczamy dalej —
-                // poszczególne testy rejestrują własne handlery dla POST
                 await route.continue()
             }
         })
@@ -114,20 +110,15 @@ test.describe('Giełda Sąsiedzka (Trade) - Filtry i Publikacja', () => {
 
         await page.getByRole('button', { name: 'Opublikuj ogłoszenie' }).click()
 
-        // Weryfikacja kontraktu API
         expect(submittedPayload).not.toBeNull()
-        // Cena musi być liczbą, nie stringiem (parseFloat)
         expect(typeof submittedPayload.price).toBe('number')
         expect(submittedPayload.price).toBe(150.50)
-        // Pozostałe pola kontraktu
         expect(submittedPayload.title).toBe('Stół drewniany')
         expect(submittedPayload.contact).toBe('test@tutej.app')
         expect(submittedPayload.authorId).toBe(99)
-        // Zdjęcia muszą być tablicą base64
         expect(Array.isArray(submittedPayload.images)).toBe(true)
         expect(submittedPayload.images.length).toBeGreaterThan(0)
 
-        // Weryfikacja UI: nowe ogłoszenie pojawia się na liście po zamknięciu modala
         await expect(page.locator('text=Stół drewniany')).toBeVisible()
     })
 
@@ -144,12 +135,10 @@ test.describe('Giełda Sąsiedzka (Trade) - Filtry i Publikacja', () => {
 
         await page.getByRole('button', { name: 'Dodaj nową ofertę' }).click()
 
-        // Wypełniamy wszystkie pola oprócz zdjęć
         await page.locator('[class*="modal"]').getByRole('textbox').first().fill('Stół drewniany')
         await page.getByPlaceholder('Nr telefonu lub email').fill('test@tutej.app')
         await page.locator('textarea').fill('Opis')
 
-        // Mockujemy dialog aby nie blokował testu
         page.on('dialog', dialog => dialog.accept())
 
         await page.getByRole('button', { name: 'Opublikuj ogłoszenie' }).click()

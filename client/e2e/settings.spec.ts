@@ -38,11 +38,8 @@ test.describe('Ustawienia Użytkownika - Profil i Bezpieczeństwo', () => {
 
         await page.getByRole('button', { name: 'Zmień hasło' }).click()
 
-        // Kluczowa asercja: weryfikujemy że żądanie HTTP nie wyszło,
-        // a nie że React wyrenderował konkretny string błędu
         expect(apiCalled).toBe(false)
 
-        // Sprawdzamy obecność komunikatu błędu bez porównania konkretnego stringa
         await expect(page.locator('[class*="error"]').last()).toBeVisible()
     })
 
@@ -54,8 +51,8 @@ test.describe('Ustawienia Użytkownika - Profil i Bezpieczeństwo', () => {
         })
 
         await page.getByPlaceholder('••••••••').nth(0).fill('StareHaslo123')
-        await page.getByPlaceholder('••••••••').nth(1).fill('Ab1')   // za krótkie
-        await page.getByPlaceholder('••••••••').nth(2).fill('Ab1')   // zgodne, żeby nie wpaść w poprzedni warunek
+        await page.getByPlaceholder('••••••••').nth(1).fill('Ab1')   
+        await page.getByPlaceholder('••••••••').nth(2).fill('Ab1')  
 
         await page.getByRole('button', { name: 'Zmień hasło' }).click()
 
@@ -77,9 +74,7 @@ test.describe('Ustawienia Użytkownika - Profil i Bezpieczeństwo', () => {
         await page.getByRole('button', { name: 'Zapisz zmiany' }).click()
 
         expect(interceptedBody).not.toBeNull()
-        // Weryfikuje że edytowane pole trafia do payloadu
         expect(interceptedBody.firstName).toBe('Janusz')
-        // Weryfikuje że nieedytowane pole nie zostaje utracone
         expect(interceptedBody.lastName).toBe('Kowalski')
     })
 
@@ -98,10 +93,8 @@ test.describe('Ustawienia Użytkownika - Profil i Bezpieczeństwo', () => {
         await page.getByRole('button', { name: 'Zmień hasło' }).click()
 
         expect(interceptedBody).not.toBeNull()
-        // Weryfikuje kontrakt API: obecne hasło i nowe hasło w payloadzie
         expect(interceptedBody.currentPassword).toBe('StareHaslo123')
         expect(interceptedBody.newPassword).toBe('NoweHaslo123')
-        // Upewniamy się że confirmPassword nie wycieka do API
         expect(interceptedBody.confirmPassword).toBeUndefined()
     })
 })

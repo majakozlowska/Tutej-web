@@ -13,7 +13,7 @@ const mockNotice = {
         id: 4,
         firstName: 'Tomasz',
         lastName: 'Nowak',
-        photo: null, // Test inicjałów
+        photo: null, 
         role: 'ADMIN' as const
     }
 }
@@ -41,7 +41,7 @@ describe('NoticeCard Component - Testy logiki i algorytmów (Bez tautologii)', (
         })
 
         it('powinien poprawnie przeliczyć minuty, gdy ogłoszenie dodano np. 25 minut temu', () => {
-            const now = new Date('2026-06-01T12:25:00.000Z') // 25 min po 12:00
+            const now = new Date('2026-06-01T12:25:00.000Z') 
  vi.setSystemTime(now)
 
             render(<NoticeCard notice={mockNotice} delay="0s" />)
@@ -50,12 +50,11 @@ describe('NoticeCard Component - Testy logiki i algorytmów (Bez tautologii)', (
         })
 
         it('powinien zwrócić pełną datę sformatowaną lokalnie, jeśli minął ponad dzień', () => {
-            const now = new Date('2026-06-05T12:00:00.000Z') // Parę dni później
+            const now = new Date('2026-06-05T12:00:00.000Z') 
             vi.setSystemTime(now)
 
             render(<NoticeCard notice={mockNotice} delay="0s" />)
             
-            // toLocaleDateString dla pl-PL z czerwca zamieni to na czytelny tekst
             expect(screen.getByText(/1 czerwca 2026/i)).toBeTruthy()
         })
     })
@@ -64,7 +63,6 @@ describe('NoticeCard Component - Testy logiki i algorytmów (Bez tautologii)', (
         it('powinien wyrenderować inicjały autora, gdy pole photo jest null', () => {
             render(<NoticeCard notice={mockNotice} delay="0s" />)
 
-            // Algorytm pobiera pierwsze znaki: T z Tomasz i N z Nowak
             const initialsContainer = screen.getByText('TN')
             expect(initialsContainer).toBeTruthy()
         })
@@ -77,10 +75,8 @@ describe('NoticeCard Component - Testy logiki i algorytmów (Bez tautologii)', (
 
             const { container } = render(<NoticeCard notice={noticeWithPhoto} delay="0s" />)
 
-            // Inicjały nie powinny się wygenerować
             expect(screen.queryByText('TN')).toBeNull()
             
-            // Powinien za to istnieć tag img z poprawnym źródłem
             const img = container.querySelector('img')
             expect(img?.getAttribute('src')).toBe('http://avatar.link/img.jpg')
         })
@@ -90,19 +86,14 @@ describe('NoticeCard Component - Testy logiki i algorytmów (Bez tautologii)', (
     it('powinien zresetować styl overflow na body do wartości "auto" podczas unmountu (odmontowania)', async () => {
         const { unmount } = render(<NoticeCard notice={mockNotice} delay="0s" />)
 
-        // Znajdujemy kartę jako przycisk
         const cardButton = screen.getByRole('button', { name: /Remont nawierzchni/i })
         
-        // Zamiast userEvent, używamy bezpiecznego dla FakeTimers fireEvent
         fireEvent.click(cardButton)
 
-        // Sprawdzamy czy modal zmienił overflow na hidden
         expect(document.body.style.overflow).toBe('hidden')
 
-        // Odmontowujemy komponent
         unmount()
 
-        // Funkcja czyszcząca w useEffect musi przywrócić wolny scroll
         expect(document.body.style.overflow).toBe('auto')
     })
 })

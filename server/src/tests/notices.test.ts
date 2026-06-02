@@ -2,7 +2,6 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import request from 'supertest';
 import app from '../index.js';
 
-// 1. Wyłącznie mockowanie Prismy – czysto i bezpiecznie
 vi.mock('@prisma/client', () => {
   return {
     PrismaClient: class {
@@ -37,13 +36,11 @@ vi.mock('@prisma/client', () => {
   };
 });
 
-// 2. SPrytny Myk: Podmieniamy zachowanie middleware bezpośrednio w module auth, zachowując router
 vi.mock('../routes/auth.js', async (importOriginal) => {
   const actual = await importOriginal() as any;
   return {
-    ...actual, // Zachowuje domyślny eksport routera (zapobiega błędowi crasha)
+    ...actual, 
     authenticate: (req: any, res: any, next: any) => {
-      // Wstrzykujemy sztucznego użytkownika bezpośrednio do sesji żądania testowego
       req.user = { id: 1, neighborhoodId: 5, role: 'USER' };
       next();
     }

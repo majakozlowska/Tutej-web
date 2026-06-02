@@ -6,19 +6,16 @@ vi.mock('@prisma/client', () => {
     return {
         PrismaClient: class {
             event = {
-                // Mock który weryfikuje czy router przekazał orderBy: { date: 'asc' }
                 findMany: vi.fn().mockImplementation((args) => {
                     const data = [
                         { id: 1, name: 'Starsze wydarzenie', date: new Date('2026-06-01'), authorId: 1 },
                         { id: 2, name: 'Nowsze wydarzenie',  date: new Date('2026-07-01'), authorId: 1 }
                     ]
-                    // Sortujemy tylko jeśli router poprawnie przekazał orderBy asc
                     if (args?.orderBy?.date === 'asc') {
                         return Promise.resolve([...data].sort(
                             (a, b) => a.date.getTime() - b.date.getTime()
                         ))
                     }
-                    // Bez sortowania zwracamy odwrotnie — test to wykryje
                     return Promise.resolve([...data].reverse())
                 }),
 
@@ -26,9 +23,9 @@ vi.mock('@prisma/client', () => {
                     return Promise.resolve({
                         id: 99,
                         title:           args.data.name,
-                        price:           args.data.price,        // sprawdzimy typ
-                        authorId:        args.data.authorId,     // sprawdzimy typ
-                        neighborhoodId:  args.data.neighborhoodId // sprawdzimy skąd pochodzi
+                        price:           args.data.price,        
+                        authorId:        args.data.authorId,    
+                        neighborhoodId:  args.data.neighborhoodId 
                     })
                 })
             };
@@ -55,8 +52,6 @@ describe('Events Router - Testy logiki biznesowej', () => {
 
             expect(response.status).toBe(200)
             expect(response.body).toHaveLength(2)
-            // Test nietautologiczny: mock celowo zwraca dane w złej kolejności bez orderBy
-            // Jeśli router nie przekaże orderBy: { date: 'asc' }, ten test padnie
             expect(new Date(response.body[0].date).getTime())
                 .toBeLessThan(new Date(response.body[1].date).getTime())
         })
@@ -69,8 +64,8 @@ describe('Events Router - Testy logiki biznesowej', () => {
                 description: 'Opis',
                 place:       'Park',
                 date:        '2026-08-20T18:00:00.000Z',
-                authorId:    '1',      // string → parseInt
-                price:       '29.99',  // string → parseFloat
+                authorId:    '1',      
+                price:       '29.99',  
                 image:       'img.jpg'
             }
 
@@ -78,20 +73,17 @@ describe('Events Router - Testy logiki biznesowej', () => {
 
             expect(response.status).toBe(201)
 
-            // Weryfikujemy rzutowanie typów
             expect(typeof response.body.authorId).toBe('number')
             expect(response.body.authorId).toBe(1)
             expect(typeof response.body.price).toBe('number')
             expect(response.body.price).toBe(29.99)
 
-            // Kluczowe: neighborhoodId pochodzi z bazy (user.neighborhoodId = 77), nie z body
             expect(response.body.neighborhoodId).toBe(77)
         })
 
         it('powinien zwrócić 400, gdy brakuje wymaganego pola (np. image)', async () => {
             const response = await request(app).post('/api/events').send({
                 name: 'Brak reszty pól'
-                // brak: description, place, date, authorId, image
             })
 
             expect(response.status).toBe(400)
@@ -104,7 +96,7 @@ describe('Events Router - Testy logiki biznesowej', () => {
                 description: 'Opis',
                 place:       'Miejsce',
                 date:        '2026-08-20T18:00:00.000Z',
-                authorId:    '9999', // mock zwróci null dla tego ID
+                authorId:    '9999', 
                 image:       'img.jpg'
             })
 
@@ -120,11 +112,9 @@ describe('Events Router - Testy logiki biznesowej', () => {
                 date:        '2026-08-20T18:00:00.000Z',
                 authorId:    '1',
                 image:       'img.jpg'
-                // brak price
             })
 
             expect(response.status).toBe(201)
-            // Router robi: price ? parseFloat(price) : null
             expect(response.body.price).toBeNull()
         })
     })

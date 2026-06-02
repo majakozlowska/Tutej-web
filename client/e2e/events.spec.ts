@@ -28,15 +28,12 @@ const MOCK_EVENTS = [
 test.describe('Podstrona Wydarzeń - Filtrowanie, Cykl Życia i Interakcje (Bez bazy danych)', () => {
 
     test.beforeEach(async ({ context, page }) => {
-        // Gwarancja czystego stanu autoryzacji przed renderem komponentu React
         await context.addInitScript(() => {
             window.localStorage.setItem('userId', '200')
             window.localStorage.setItem('isAuth', 'true')
             window.localStorage.setItem('token', 'fake-jwt-token')
         })
 
-        // PRECYZYJNY REGEX: Łapie wyłącznie zapytania do API (zarówno z portem 5000, jak i bez), 
-        // ignorując główny adres strony /events
         const apiEventsRegex = /\/api\/events(\/|$|\?)/
 
         await page.route(apiEventsRegex, async (route) => {
@@ -69,7 +66,6 @@ test.describe('Podstrona Wydarzeń - Filtrowanie, Cykl Życia i Interakcje (Bez 
             }
         })
 
-        // Teraz strona załaduje się błyskawicznie, bo Playwright jej nie zablokuje
         await page.goto('http://localhost:5173/events')
         await page.locator('text=Wydarzenia').first().waitFor({ state: 'visible' })
     })
@@ -167,17 +163,13 @@ test.describe('Podstrona Wydarzeń - Filtrowanie, Cykl Życia i Interakcje (Bez 
             await dialog.dismiss()
         })
 
-        // Upewniamy się, że karta z szachami jest wyrenderowana
         const eventCard = page.locator('text=Dzielnicowy Turniej Szachowy').first()
         await expect(eventCard).toBeVisible({ timeout: 5000 })
 
-        // Pobieramy przycisk usuwania znajdujący się w obrębie kontenera tej karty (na podstawie klasy removeBtn lub znaku ✕)
         const deleteButton = page.locator('div').filter({ hasText: /^Dzielnicowy Turniej Szachowy/ }).locator('button').first()
         
-        // Klikamy usuwanie (wywoła okno dialogowe, które anulujemy)
         await deleteButton.click()
 
-        // Wynik: Karta musi dalej istnieć na ekranie
         await expect(page.locator('text=Dzielnicowy Turniej Szachowy').first()).toBeVisible()
     })
 })

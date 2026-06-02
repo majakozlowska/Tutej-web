@@ -20,7 +20,6 @@ test.describe('Ogłoszenia - Zarządzanie Uprawnieniami i Publikacja', () => {
             window.localStorage.setItem('token', 'user-token')
         })
 
-        // Wszystkie trasy rejestrujemy przed goto
         await page.route('**/api/notices', async (route) => {
             await route.fulfill({
                 status: 200,
@@ -32,8 +31,6 @@ test.describe('Ogłoszenia - Zarządzanie Uprawnieniami i Publikacja', () => {
         await page.goto('http://localhost:5173/notices')
         await expect(page.locator('text=Modernizacja placu zabaw')).toBeVisible({ timeout: 7000 })
 
-        // TEST NIETAUTOLOGICZNY: canPost = userRole === 'COUNCILLOR' || 'ADMIN'
-        // Dla roli USER warunek jest false, więc przycisk nie renderuje się w DOM
         await expect(page.getByRole('button', { name: 'Dodaj nowe ogłoszenie' })).not.toBeVisible()
     })
 
@@ -44,7 +41,6 @@ test.describe('Ogłoszenia - Zarządzanie Uprawnieniami i Publikacja', () => {
             window.localStorage.setItem('token', 'councillor-token')
         })
 
-        // Rejestrujemy GET i POST razem przed goto — eliminuje ryzyko wyścigu
         await page.route('**/api/notices', async (route) => {
             if (route.request().method() === 'GET') {
                 await route.fulfill({
@@ -54,7 +50,6 @@ test.describe('Ogłoszenia - Zarządzanie Uprawnieniami i Publikacja', () => {
                 })
             }
             if (route.request().method() === 'POST') {
-                // Weryfikujemy nagłówek Authorization zanim odpowiemy
                 const headers = route.request().headers()
                 expect(headers['authorization']).toBe('Bearer councillor-token')
 
@@ -83,9 +78,7 @@ test.describe('Ogłoszenia - Zarządzanie Uprawnieniami i Publikacja', () => {
 
         await page.getByRole('button', { name: 'Opublikuj' }).click()
 
-        // Nowe ogłoszenie musi pojawić się na liście
         await expect(page.locator('text=Pilny komunikat o wodzie')).toBeVisible()
-        // Modal musi się zamknąć
         await expect(page.getByPlaceholder('Wpisz tytuł...')).not.toBeVisible()
     })
 
@@ -102,12 +95,9 @@ test.describe('Ogłoszenia - Zarządzanie Uprawnieniami i Publikacja', () => {
 
         await page.goto('http://localhost:5173/notices')
 
-        // Komponent w catch() woła console.error i setLoading(false) — skeleton musi zniknąć
         await expect(page.locator('[class*="skeletonList"]')).not.toBeVisible({ timeout: 7000 })
 
-        // Nagłówek strony musi być widoczny — aplikacja nie może crashować
         await expect(page.locator('text=Ogłoszenia')).toBeVisible()
-        // Żadna karta nie powinna się pojawić
         await expect(page.locator('text=Modernizacja placu zabaw')).not.toBeVisible()
     })
 })

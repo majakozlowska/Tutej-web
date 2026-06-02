@@ -9,11 +9,9 @@ describe('InputField Component - Testy zachowania (Bez tautologii)', () => {
         it('powinien wyrenderować domyślną ikonę "letters", gdy parametr icon nie zostanie podany', () => {
             const { container } = render(<InputField placeholder="Imię" />)
             
-            // Szukamy kontenera ikony
             const iconSpan = container.querySelector('span')
             expect(iconSpan).toBeTruthy()
             
-            // Weryfikujemy domyślne zachowanie: czy w środku znajduje się SVG
             const svgElement = iconSpan?.querySelector('svg')
             expect(svgElement).toBeTruthy()
         })
@@ -24,8 +22,6 @@ describe('InputField Component - Testy zachowania (Bez tautologii)', () => {
             const svgElement = container.querySelector('svg')
             expect(svgElement).toBeTruthy()
             
-            // Test nietautologiczny: sprawdzamy specyficzną cechę ikony lock z kodu źródłowego,
-            // np. obecność punktu startowego d="M8 11V7..." rysującego kłódkę.
             const dAttribute = svgElement?.querySelector('path')?.getAttribute('d')
             expect(dAttribute).toContain('M8 11V7')
         })
@@ -38,22 +34,17 @@ describe('InputField Component - Testy zachowania (Bez tautologii)', () => {
             
             const input = screen.getByPlaceholderText('Wpisz tekst')
             
-            // Symulujemy rzeczywiste pisanie użytkownika na klawiaturze
             await userEvent.type(input, 'A')
 
-            // Logika komponentu wykonuje: onChange?.(e.target.value)
-            // Test udowadnia, że do rodzica nie leci obiekt Event, tylko czysty string "A"
             expect(onChangeMock).toHaveBeenCalledTimes(1)
             expect(onChangeMock).toHaveBeenCalledWith('A')
         })
 
         it('nie powinien wywołać błędu aplikacji (crash), gdy użytkownik pisze, a onChange jest niezdefiniowane', async () => {
-            // Renderujemy komponent bez przekazywania propsa onChange (opcjonalny parametr)
             render(<InputField placeholder="Brak callbacku" />)
             
             const input = screen.getByPlaceholderText('Brak callbacku')
             
-            // Sprawdzamy odporność na błędy: instrukcja onChange?.(value) musi zabezpieczyć wątek
             await expect(userEvent.type(input, 'Test')).resolves.not.toThrow()
         })
     })

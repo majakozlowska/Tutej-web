@@ -32,13 +32,11 @@ describe('ListingCard Component - Testy integracji stanu i sieci (Bez tautologii
         it('powinien zablokować przyciski podczas wysyłania żądania PATCH i zaktualizować status po sukcesie', async () => {
             localStorage.setItem('userId', '200')
 
-            // 1. Tworzymy kontrolowany punkt obietnicy (Deferred)
             let resolveNetworkCall!: (value: Response) => void
             const networkPromise = new Promise<Response>((resolve) => {
                 resolveNetworkCall = resolve
             })
 
-            // 2. Mockujemy fetch, aby zwracał naszą wiszącą obietnicę
             const fetchMock = vi.mocked(fetch).mockImplementation(() => networkPromise)
 
             const onUpdateMock = vi.fn()
@@ -46,15 +44,12 @@ describe('ListingCard Component - Testy integracji stanu i sieci (Bez tautologii
 
             const reserveBtn = screen.getByRole('button', { name: 'ZAREZERWOWANE' })
 
-            // 3. Odpalamy kliknięcie wewnątrz act, aby React przetworzył synchroniczną zmianę stanu na true
             act(() => {
                 fireEvent.click(reserveBtn)
             })
 
-            // 4. SEKWENCJA W TOKU: W tym momencie sieć "wisi", więc przycisk MUSI być zablokowany
             expect(reserveBtn).toBeDisabled()
 
-            // 5. SEKWENCJA FINISZ: Ręcznie pozwalamy sieci odpowiedzieć i pakujemy to w await act
             await act(async () => {
                 resolveNetworkCall({
                     ok: true,
@@ -62,7 +57,6 @@ describe('ListingCard Component - Testy integracji stanu i sieci (Bez tautologii
                 } as Response)
             })
 
-            // 6. Po powrocie z sieci przycisk się odblokowuje, a stan się aktualizuje
             expect(reserveBtn).not.toBeDisabled()
             expect(onUpdateMock).toHaveBeenCalledWith(expect.objectContaining({ status: 'RESERVED' }))
         })
@@ -70,17 +64,15 @@ describe('ListingCard Component - Testy integracji stanu i sieci (Bez tautologii
 
     describe('Reaktywność i synchronizacja źródeł danych', () => {
         it('powinien zaktualizować wewnętrzny stan, gdy zewnętrzny rekord ulegnie zmianie', () => {
-            localStorage.setItem('userId', '999') // Zwykły przeglądający
+            localStorage.setItem('userId', '999') 
             
             const { rerender } = render(<ListingCard listing={mockListing} />)
             
             expect(screen.getByText('Dostępne')).toBeTruthy()
 
-            // Symulujemy sytuację, w której zewnętrzna lista odświeża dane (np. przez WebSocket)
             const externallyUpdatedListing = { ...mockListing, status: 'SOLD' as const }
             rerender(<ListingCard listing={externallyUpdatedListing} />)
 
-            // Sprawdzamy, czy useEffect poprawnie przepiął stan i zaktualizował badge na "Sprzedane"
             expect(screen.getByText('Sprzedane')).toBeTruthy()
             expect(screen.queryByText('Dostępne')).toBeNull()
         })
@@ -95,7 +87,6 @@ describe('ListingCard Component - Testy integracji stanu i sieci (Bez tautologii
 
             render(<ListingCard listing={dirtyDataListing} />)
 
-            // \s* oznacza zero lub więcej spacji - zabezpiecza nas przed kaprysami implementacji toLocaleString w JSDOM
             expect(screen.getByText(/2\s*499,5\s*PLN/)).toBeTruthy()
         })
 

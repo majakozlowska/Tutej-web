@@ -1,4 +1,3 @@
-// client/src/hooks/useAuth.ts
 export interface CurrentUser {
 	id: number
 	firstName: string

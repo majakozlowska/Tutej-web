@@ -3,23 +3,20 @@ import request from 'supertest';
 import app from '../index.js';
 import bcrypt from 'bcrypt';
 
-// 1. PANCERNY MOCK PRISMY DLA UŻYTKOWNIKÓW
 vi.mock('@prisma/client', () => {
   return {
     PrismaClient: class {
       user = {
         findUnique: vi.fn().mockImplementation((args) => {
-          // Symulujemy, że w bazie istnieje już użytkownik o konkretnym mailu
           if (args.where.email === 'zajety@test.pl') {
             return Promise.resolve({
               id: 1,
               email: 'zajety@test.pl',
-              password: 'hashed_password_123', // hash poprawnego hasła
+              password: 'hashed_password_123', 
               role: 'USER',
               neighborhoodId: 5
             });
           }
-          // Symulujemy użytkownika o ID 10 na potrzeby zmiany hasła (/me/password)
           if (args.where.id === 10) {
             return Promise.resolve({
               id: 10,
@@ -29,7 +26,7 @@ vi.mock('@prisma/client', () => {
               neighborhoodId: 5
             });
           }
-          return Promise.resolve(null); // Dla innych maili/ID baza jest pusta
+          return Promise.resolve(null); 
         }),
         create: vi.fn().mockResolvedValue({
           id: 2,
@@ -46,7 +43,6 @@ vi.mock('@prisma/client', () => {
   };
 });
 
-// 2. MOCKOWANIE BIBLIOTEKI 'jose' (Zapewnia poprawne generowanie tokenów w testach)
 vi.mock('jose', () => {
   return {
     SignJWT: class {
@@ -63,7 +59,6 @@ vi.mock('jose', () => {
   };
 });
 
-// --- SEKCJA TESTÓW NIETAUTOLOGICZNYCH ---
 describe('Auth Router - Testy Logiki Biznesowej (Bez tautologii)', () => {
 
   describe('POST /api/auth/register', () => {
@@ -71,14 +66,13 @@ describe('Auth Router - Testy Logiki Biznesowej (Bez tautologii)', () => {
       const payload = {
         firstName: 'Jan',
         lastName: 'Kowalski',
-        email: 'zajety@test.pl', // Adres, który nasz mock bazy danych oznaczył jako zajęty
+        email: 'zajety@test.pl', 
         password: 'haslo',
         neighborhoodId: 5
       };
 
       const response = await request(app).post('/api/auth/register').send(payload);
 
-      // Asercja: Sprawdzamy czy instrukcja warunkowa 'if (existing)' działa poprawnie i chroni bazę
       expect(response.status).toBe(409);
       expect(response.body.message).toBe('Email już istnieje.');
     });
@@ -86,7 +80,6 @@ describe('Auth Router - Testy Logiki Biznesowej (Bez tautologii)', () => {
 
   describe('POST /api/auth/login', () => {
     it('powinien odmówić dostępu (401), gdy hasło nie zgadza się z hashem w bazie danych', async () => {
-      // Bezpiecznie szpiegujemy i wymuszamy, aby bcrypt.compare zwrócił fałsz
       const bcryptCompareSpy = vi.spyOn(bcrypt, 'compare').mockResolvedValue(false as never);
 
       const payload = {
@@ -96,18 +89,16 @@ describe('Auth Router - Testy Logiki Biznesowej (Bez tautologii)', () => {
 
       const response = await request(app).post('/api/auth/login').send(payload);
 
-      // Sprawdzamy, czy aplikacja poprawnie obsłużyła negatywną weryfikację kryptograficzną
       expect(response.status).toBe(401);
       expect(response.body.message).toBe('Nieprawidłowy email lub hasło.');
-      expect(response.body.token).toBeUndefined(); // Token nie ma prawa się wygenerować!
+      expect(response.body.token).toBeUndefined(); 
 
-      bcryptCompareSpy.mockRestore(); // Czyszczenie szpiega
+      bcryptCompareSpy.mockRestore(); 
     });
   });
 
   describe('PUT /api/auth/me/password', () => {
     it('powinien zwrócić błąd 400, jeśli podane "obecne hasło" jest nieprawidłowe', async () => {
-      // Wymuszamy porażkę porównania haseł przez bcrypt
       const bcryptCompareSpy = vi.spyOn(bcrypt, 'compare').mockResolvedValue(false as never);
 
       const payload = {
@@ -120,7 +111,6 @@ describe('Auth Router - Testy Logiki Biznesowej (Bez tautologii)', () => {
         .set('Authorization', 'Bearer poprawny_token')
         .send(payload);
 
-      // Weryfikacja logiki bezpieczeństwa: Nie wolno zmienić hasła, nie znając starego
       expect(response.status).toBe(400);
       expect(response.body.message).toBe('Nieprawidłowe obecne hasło.');
 

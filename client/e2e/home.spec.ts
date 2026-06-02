@@ -11,7 +11,6 @@ const MOCK_NOTICES = [
     },
     {
         id: 102,
-        // Celowo drugi element — dashboard pokazuje tylko noticesData[0]
         title: 'Sprzedam rower dziecięcy',
         content: 'Stan bardzo dobry, odbiór osobisty.',
         media: null,
@@ -48,7 +47,6 @@ test.describe('Dashboard Główny (Home) - Agregacja danych i Stany Puste', () =
         let resolveNotices: (value: unknown) => void
         const noticesPromise = new Promise(res => { resolveNotices = res })
 
-        // Blokujemy /api/notices — Promise.all w komponencie nie może się rozwiązać
         await page.route('**/api/notices', async (route) => {
             await noticesPromise
             await route.fulfill({
@@ -68,21 +66,15 @@ test.describe('Dashboard Główny (Home) - Agregacja danych i Stany Puste', () =
 
         await page.goto('http://localhost:5173/')
 
-        // TEST NIETAUTOLOGICZNY: Promise.all wisi bo notices nie odpowiedziało —
-        // finally { setLoading(false) } nie mogło się wykonać, loader MUSI być widoczny
         const loader = page.locator('text=Ładowanie podglądu...')
         await expect(loader).toBeVisible()
 
-        // Karty nie mogą istnieć dopóki loading=true
         await expect(page.locator('text=Znaleziono pęk kluczy')).not.toBeVisible()
 
-        // Zwalniamy blokadę — oba requesty w Promise.all są teraz zakończone
         resolveNotices!(true)
 
-        // setLoading(false) w finally musi ukryć loader
         await expect(loader).not.toBeVisible({ timeout: 7000 })
 
-        // Po załadowaniu karta musi się pojawić
         await expect(page.locator('text=Znaleziono pęk kluczy')).toBeVisible()
     })
 
@@ -106,12 +98,9 @@ test.describe('Dashboard Główny (Home) - Agregacja danych i Stany Puste', () =
         await page.goto('http://localhost:5173/')
         await expect(page.locator('text=Ładowanie podglądu...')).not.toBeVisible({ timeout: 7000 })
 
-        // TEST NIETAUTOLOGICZNY: mock dał 2 ogłoszenia, komponent robi setNotice(noticesData[0])
-        // Pierwsze musi być widoczne, drugie absolutnie nie
         await expect(page.locator('text=Znaleziono pęk kluczy')).toBeVisible()
         await expect(page.locator('text=Sprzedam rower dziecięcy')).not.toBeVisible()
 
-        // Wydarzenie też powinno się pojawić (eventsData[0])
         await expect(page.locator('text=Wspólne sprzątanie lasu')).toBeVisible()
     })
 
@@ -124,7 +113,6 @@ test.describe('Dashboard Główny (Home) - Agregacja danych i Stany Puste', () =
             })
         })
 
-        // Celowo pusta tablica — komponent sprawdza if (eventsData.length > 0)
         await page.route('**/api/events', async (route) => {
             await route.fulfill({
                 status: 200,
@@ -136,9 +124,7 @@ test.describe('Dashboard Główny (Home) - Agregacja danych i Stany Puste', () =
         await page.goto('http://localhost:5173/')
         await expect(page.locator('text=Ładowanie podglądu...')).not.toBeVisible({ timeout: 7000 })
 
-        // Warunek else w komponencie musi wyrenderować tekst fallbacku
         await expect(page.locator('text=Brak zaplanowanych wydarzeń.')).toBeVisible()
-        // Karta wydarzenia nie ma prawa się pojawić
         await expect(page.locator('text=Wspólne sprzątanie lasu')).not.toBeVisible()
     })
 
@@ -177,8 +163,6 @@ test.describe('Dashboard Główny (Home) - Agregacja danych i Stany Puste', () =
 
         await page.goto('http://localhost:5173/')
 
-        // catch() w komponencie woła console.error i finally setLoading(false)
-        // Loader musi zniknąć, strona nie może crashować
         await expect(page.locator('text=Ładowanie podglądu...')).not.toBeVisible({ timeout: 7000 })
         await expect(page.locator('text=Dzień dobry!')).toBeVisible()
     })
